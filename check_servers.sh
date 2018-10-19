@@ -37,7 +37,7 @@ get_os() {
 
 get_cpu() {
 	cpu_num=`lscpu | grep "^CPU(s):" | awk '{print $2}'`
-	echo "cup_number=$cpu_num" >> tmp.txt
+	echo "cpu_number=$cpu_num" >> tmp.txt
 }
 
 get_mem() {
