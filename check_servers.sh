@@ -36,7 +36,7 @@ get_os() {
 }
 
 get_cpu() {
-	cup_num=`lscpu | grep '^CPU(s):' | awk '{print $2}'`
+	cup_num=`lscpu | grep "^CPU(s):" | awk '{print $2}'`
 	echo "cup_number=$cpu_num" >> tmp.txt
 }
 
@@ -57,6 +57,7 @@ network_connectivity() {
     target=www.baidu.com
     # connect gw 
      ping -c2 -i0.3 -W1 $gw &>/dev/null
+	 echo $?
      if [ $? –eq 0 ];then
         connect_gw="True" 
      else
