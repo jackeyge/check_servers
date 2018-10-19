@@ -52,7 +52,7 @@ get_disk() {
 
 network_connectivity() {
 	#ping -c 10 -q $internet_domain | grep received | awk '{print $4}'  
-	gw=`route -n | grep UG | awk '{print $2}'`
+	gw=`route -n | grep UG | awk '{print $2}'|head -1`
     timeout=5    
     target=www.baidu.com
     # connect gw 
@@ -70,19 +70,10 @@ network_connectivity() {
     if [ "x$ret_code" = "x200" ]; then    
 		internet="True"
     else    
-		internet="false"
+		internet="False"
     fi 
     echo "connect_internet=$internet" >> tmp.txt	
 }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -96,6 +87,7 @@ main() {
 	get_disk
 	network_connectivity
 	cat tmp.txt | jo -p
+	rm -f tmp.txt
 }
 
 main

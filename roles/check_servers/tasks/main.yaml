@@ -1,0 +1,20 @@
+---
+- name: copy jo to host
+  copy:
+    src: jo
+    dest: /usr/bin/jo
+    owner: root
+    group: root
+    mode: 0755
+- name: copy check_servers.sh to host
+  copy:
+    src: check_servers.sh
+    dest: /tmp/check_servers.sh
+    mode: 0755
+
+- name: running check_servers.sh
+  shell: sh /tmp/check_servers.sh
+  register: result
+   
+- name: Show check info 
+  debug: var=result.stdout verbosity=0
