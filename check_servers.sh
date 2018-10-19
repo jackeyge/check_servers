@@ -36,7 +36,7 @@ get_os() {
 }
 
 get_cpu() {
-	cup_num=`lscpu | grep "^CPU(s):" | awk '{print $2}'`
+	cpu_num=`lscpu | grep "^CPU(s):" | awk '{print $2}'`
 	echo "cup_number=$cpu_num" >> tmp.txt
 }
 
@@ -58,7 +58,7 @@ network_connectivity() {
     # connect gw 
      ping -c2 -i0.3 -W1 $gw &>/dev/null
 	 echo $?
-     if [ $? –eq 0 ];then
+     if [ $? -eq 0 ];then
         connect_gw="True" 
      else
         connect_gw="False" 
