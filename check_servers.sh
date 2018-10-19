@@ -9,19 +9,92 @@ install_jo() {
 
 get_hostname() {
     host_name=`hostname`
+	echo "hostname=$host_name" >> tmp.txt
 }
 
 get_ip() {
     net_list=`ls /sys/class/net | grep -v docker0 | grep -v lo`
 	>net.txt
+	# get ip list
 	for net in $net_list
 	do
 		ip=`ifconfig $net | grep 'inet ' | awk '{print $2}'`
 		if [ ! -n "$ip" ] ;then
 			break
 		fi
-		echo  "$net $ip" >> net.txt
+		echo  "$net=$ip" >> net.txt
 	done
+	# create json
+	net_ip_json=`cat net.txt | jo -p`
+	rm -f net.txt
+	echo "ip_list=$net_ip_json" >> tmp.txt
 }
 
-get_ip
+get_os() {
+	redhat-release=`cat /etc/redhat-release`
+	echo "os_version=$redhat-release" >> tmp.txt
+}
+
+get_cpu() {
+	cup_num=`lscpu | grep '^CPU(s):' | awk '{print $2}'`
+	echo "cup_number=$cpu_num" >> tmp.txt
+}
+
+get_mem() {
+	mem_to=`free -h | grep Mem | awk '{print $2}'`
+	echo "mem_total=$mem_to" >> tmp.txt
+}
+
+get_disk() {
+	disk_json=`lsblk | grep disk | awk '{print $1"="$4}'|jo -p`
+	echo "disk_list=$disk_json" >> tmp.txt
+}
+
+network_connectivity() {
+	#ping -c 10 -q $internet_domain | grep received | awk '{print $4}'  
+	gw=`route -n | grep UG | awk '{print $2}'`
+    timeout=5    
+    target=www.baidu.com
+    # connect gw 
+     ping -c2 -i0.3 -W1 $gw &>/dev/null
+     if [ $? –eq 0 ];then
+        connect_gw="True" 
+     else
+        connect_gw="False" 
+     fi	
+	 echo "connect_getway=$connect_gw" >> tmp.txt
+    #get http code    
+    ret_code=`curl -I -s --connect-timeout $timeout $target -w %{http_code} | tail -n1`    
+        
+    if [ "x$ret_code" = "x200" ]; then    
+		internet="True"
+    else    
+		internet="false"
+    fi 
+    echo "connect_internet=$internet" >> tmp.txt	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+main() {
+	>tmp.txt
+	get_hostname
+	get_ip
+	get_os
+	get_cpu
+	get_mem
+	get_disk
+	network_connectivity
+	cat tmp.txt | jo -p
+}
+
+main
