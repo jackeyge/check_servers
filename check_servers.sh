@@ -17,6 +17,9 @@ get_ip() {
 	for net in $net_list
 	do
 		ip=`ifconfig $net | grep 'inet ' | awk '{print $2}'`
+		if [ ! -n "$ip" ] ;then
+			break
+		fi
 		echo  "$net $ip" >> net.txt
 	done
 }
