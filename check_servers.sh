@@ -57,7 +57,7 @@ network_connectivity() {
     target=www.baidu.com
     # connect gw 
      ping -c2 -i0.3 -W1 $gw &>/dev/null
-	 echo $?
+	 #echo $?
      if [ $? -eq 0 ];then
         connect_gw="True" 
      else
