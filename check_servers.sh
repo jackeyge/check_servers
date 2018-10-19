@@ -25,14 +25,14 @@ get_ip() {
 		echo  "$net=$ip" >> net.txt
 	done
 	# create json
-	net_ip_json=`cat net.txt | jo -p`
+	net_ip_json=`cat net.txt | jo`
 	rm -f net.txt
 	echo "ip_list=$net_ip_json" >> tmp.txt
 }
 
 get_os() {
-	redhat-release=`cat /etc/redhat-release`
-	echo "os_version=$redhat-release" >> tmp.txt
+	redhat_rels=`cat /etc/redhat-release`
+	echo "os_version=$redhat_rels" >> tmp.txt
 }
 
 get_cpu() {
@@ -46,7 +46,7 @@ get_mem() {
 }
 
 get_disk() {
-	disk_json=`lsblk | grep disk | awk '{print $1"="$4}'|jo -p`
+	disk_json=`lsblk | grep disk | awk '{print $1"="$4}'|jo`
 	echo "disk_list=$disk_json" >> tmp.txt
 }
 
