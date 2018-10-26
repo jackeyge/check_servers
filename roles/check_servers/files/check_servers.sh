@@ -62,6 +62,7 @@ network_connectivity() {
         connect_gw="True" 
      else
         connect_gw="False" 
+		echo "connect_getway=$connect_gw" >> err.txt
      fi	
 	 echo "connect_getway=$connect_gw" >> tmp.txt
     #get http code    
@@ -71,6 +72,7 @@ network_connectivity() {
 		internet="True"
     else    
 		internet="False"
+		echo "connect_internet=$internet" >> err.txt
     fi 
     echo "connect_internet=$internet" >> tmp.txt	
 }
@@ -86,8 +88,13 @@ main() {
 	get_mem
 	get_disk
 	network_connectivity
+	if [ -e err.txt ];then
+	    err=`cat err.txt |jo`
+		echo "err_message=$err" >> tmp.txt
+	fi
 	cat tmp.txt | jo -p
 	rm -f tmp.txt
+	rm -f err.txt
 }
 
 main
