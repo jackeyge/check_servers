@@ -53,7 +53,7 @@ get_disk() {
 network_connectivity() {
 	#ping -c 10 -q $internet_domain | grep received | awk '{print $4}'  
 	gw=`route -n | grep UG | awk '{print $2}'|head -1`
-    timeout=5    
+    timeout=60    
     target=www.baidu.com
     # connect gw 
      ping -c2 -i0.3 -W1 $gw &>/dev/null
