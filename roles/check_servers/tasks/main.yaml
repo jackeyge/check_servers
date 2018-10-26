@@ -18,3 +18,7 @@
    
 - name: Show check info 
   debug: var=result.stdout verbosity=0
+  
+- name: if stdout chekck failed,interrupt execution
+  fail: msg="err_message"
+  when: result.stdout == "failed"
